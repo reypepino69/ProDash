@@ -1,0 +1,60 @@
+# ⚡ ProDash — Premium Analytics Dashboard
+
+A stunning, real-time analytics dashboard built with vanilla JavaScript and Chart.js. Features dark glassmorphism design, live-updating charts, and smooth micro-animations.
+
+![ProDash Preview](https://img.shields.io/badge/Status-Live-brightgreen) ![License](https://img.shields.io/badge/License-MIT-blue) ![Version](https://img.shields.io/badge/Version-1.0-purple)
+
+## ✨ Features
+
+- 🌙 **Dark/Light Theme** — Glassmorphism UI with animated gradient backgrounds
+- 📊 **Interactive Charts** — Revenue line chart with 7D/30D/90D/1Y views
+- 🍩 **Traffic Doughnut** — Visual breakdown of traffic sources
+- 📈 **Live Data** — Real-time updating stat cards and visitor count
+- 🟢 **Live Visitors** — Real-time chart with country breakdown
+- 📋 **Activity Feed** — Recent user activity with avatars
+- 🔔 **Toast Notifications** — Feedback on every interaction
+- 📱 **Fully Responsive** — Works on desktop, tablet, and mobile
+- ⚡ **Zero Dependencies** — Pure vanilla JS + Chart.js CDN
+
+## 🛠️ Tech Stack
+
+- **Build:** Vite
+- **Frontend:** HTML5 + CSS3 + Vanilla JavaScript
+- **Charts:** Chart.js 4.x (via CDN)
+- **Fonts:** Inter (Google Fonts)
+- **Design:** Glassmorphism + CSS Custom Properties
+
+## 🚀 Quick Start
+
+```bash
+# Clone the repo
+git clone https://github.com/bnxo69/ProDash.git
+cd ProDash
+
+# Install & run
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173` in your browser.
+
+## 📦 Build for Production
+
+```bash
+npm run build
+npm run preview
+```
+
+## 🎨 Customization
+
+- **Colors:** Edit CSS variables in `style.css` (`:root` section)
+- **Data:** Modify arrays in `main.js` (revenue, traffic, activities)
+- **Theme:** Toggle between dark/light with the moon icon
+
+## 📄 License
+
+MIT License — free for personal and commercial use.
+
+---
+
+Built with ❤️ by [bnxo69](https://github.com/bnxo69)

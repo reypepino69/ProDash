@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Pro Analytics Dashboard - Real-time data visualization and insights"
+    />
+    <title>Pro Dashboard | Analytics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-icon">⚡</div>
+          <span class="logo-text">ProDash</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-page="dashboard">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-page="analytics">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" />
+          </svg>
+          <span>Analytics</span>
+        </a>
+        <a href="#" class="nav-item" data-page="users">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+          <span>Users</span>
+        </a>
+        <a href="#" class="nav-item" data-page="revenue">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line x1="12" y1="1" x2="12" y2="23" />
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          </svg>
+          <span>Revenue</span>
+        </a>
+        <a href="#" class="nav-item" data-page="settings">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+            />
+          </svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div class="user-avatar">B</div>
+          <div class="user-info">
+            <span class="user-name">bnxo69</span>
+            <span class="user-role">Admin</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" id="menuToggle">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
+          <h1 class="page-title">Dashboard</h1>
+        </div>
+        <div class="topbar-right">
+          <div class="search-bar">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" placeholder="Search..." id="searchInput" />
+          </div>
+          <button class="icon-btn notification-btn" id="notifBtn">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
+            <span class="notification-badge">3</span>
+          </button>
+          <button class="icon-btn theme-toggle" id="themeToggle">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              class="moon-icon"
+            >
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              class="sun-icon"
+              style="display: none"
+            >
+              <circle cx="12" cy="12" r="5" />
+              <line x1="12" y1="1" x2="12" y2="3" />
+              <line x1="12" y1="21" x2="12" y2="23" />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1="1" y1="12" x2="3" y2="12" />
+              <line x1="21" y1="12" x2="23" y2="12" />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <div class="dashboard-content">
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card" id="stat-revenue">
+            <div class="stat-icon revenue-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              </svg>
+            </div>
+            <div class="stat-details">
+              <span class="stat-label">Total Revenue</span>
+              <span class="stat-value" id="revenueValue">$48,295</span>
+              <span class="stat-change positive">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                </svg>
+                +12.5%
+              </span>
+            </div>
+            <div class="stat-sparkline">
+              <canvas id="sparkRevenue"></canvas>
+            </div>
+          </div>
+
+          <div class="stat-card" id="stat-users">
+            <div class="stat-icon users-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+              </svg>
+            </div>
+            <div class="stat-details">
+              <span class="stat-label">Active Users</span>
+              <span class="stat-value" id="usersValue">2,847</span>
+              <span class="stat-change positive">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                </svg>
+                +8.2%
+              </span>
+            </div>
+            <div class="stat-sparkline"><canvas id="sparkUsers"></canvas></div>
+          </div>
+
+          <div class="stat-card" id="stat-orders">
+            <div class="stat-icon orders-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <path d="M16 10a4 4 0 0 1-8 0" />
+              </svg>
+            </div>
+            <div class="stat-details">
+              <span class="stat-label">Total Orders</span>
+              <span class="stat-value" id="ordersValue">1,429</span>
+              <span class="stat-change positive">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                </svg>
+                +5.7%
+              </span>
+            </div>
+            <div class="stat-sparkline"><canvas id="sparkOrders"></canvas></div>
+          </div>
+
+          <div class="stat-card" id="stat-conversion">
+            <div class="stat-icon conversion-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" />
+              </svg>
+            </div>
+            <div class="stat-details">
+              <span class="stat-label">Conversion</span>
+              <span class="stat-value" id="conversionValue">3.24%</span>
+              <span class="stat-change negative">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  style="transform: rotate(180deg)"
+                >
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                </svg>
+                -1.8%
+              </span>
+            </div>
+            <div class="stat-sparkline">
+              <canvas id="sparkConversion"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="charts-grid">
+          <div class="chart-card main-chart">
+            <div class="chart-header">
+              <h2>Revenue Overview</h2>
+              <div class="chart-tabs">
+                <button class="chart-tab active" data-range="7d">7D</button>
+                <button class="chart-tab" data-range="30d">30D</button>
+                <button class="chart-tab" data-range="90d">90D</button>
+                <button class="chart-tab" data-range="1y">1Y</button>
+              </div>
+            </div>
+            <div class="chart-body">
+              <canvas id="revenueChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-header">
+              <h2>Traffic Sources</h2>
+            </div>
+            <div class="chart-body doughnut-container">
+              <canvas id="trafficChart"></canvas>
+              <div class="doughnut-center">
+                <span class="doughnut-value">24.8K</span>
+                <span class="doughnut-label">Visitors</span>
+              </div>
+            </div>
+            <div class="traffic-legend" id="trafficLegend"></div>
+          </div>
+        </div>
+
+        <!-- Bottom Row -->
+        <div class="bottom-grid">
+          <!-- Recent Activity -->
+          <div class="card activity-card">
+            <div class="card-header">
+              <h2>Recent Activity</h2>
+              <a href="#" class="view-all">View All</a>
+            </div>
+            <div class="activity-list" id="activityList"></div>
+          </div>
+
+          <!-- Live Visitors -->
+          <div class="card live-card">
+            <div class="card-header">
+              <h2>Live Visitors</h2>
+              <span class="live-badge">
+                <span class="live-dot"></span>
+                Live
+              </span>
+            </div>
+            <div class="live-count" id="liveCount">142</div>
+            <div class="live-chart-container">
+              <canvas id="liveChart"></canvas>
+            </div>
+            <div class="live-locations" id="liveLocations"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
