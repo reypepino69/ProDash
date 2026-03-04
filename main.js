@@ -33,8 +33,30 @@ document.addEventListener('DOMContentLoaded', () => {
     $('.sun-icon').style.display = 'block';
   }
   if (settings.accent) document.documentElement.style.setProperty('--accent-1', settings.accent);
-  if (settings.name) { $('#userName').textContent = settings.name; $('#userAvatar').textContent = settings.name.charAt(0).toUpperCase() }
   if (settings.sidebarCollapsed) $('#sidebar').classList.add('collapsed');
+
+  // ==================== SUPABASE AUTH & USER ====================
+  // Bind logout button securely
+  const logoutBtn = $('#logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      if (window.ProDashDB) await window.ProDashDB.signOut();
+    });
+  }
+
+  // Fetch real user
+  if (window.ProDashDB) {
+    window.ProDashDB.getUser().then(user => {
+      if (user) {
+        const name = user.user_metadata?.display_name || user.email.split('@')[0];
+        $('#userName').textContent = name;
+        $('#userAvatar').textContent = name.charAt(0).toUpperCase();
+        const roleEl = $('.user-role');
+        if (roleEl) roleEl.textContent = user.email;
+      }
+    });
+  }
 
   // ==================== SPA ROUTER ====================
   const pages = ['dashboard', 'analytics', 'users', 'revenue', 'settings'];
@@ -379,13 +401,38 @@ document.addEventListener('DOMContentLoaded', () => {
     return { name:`${fn} ${ln}`, email:`${fn.toLowerCase()}.${ln.toLowerCase()}@email.com`, role:roles[rand(0,3)], status:statuses[rand(0,2)], joined:d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}), joinedTs:d.getTime(), spent:`$${rand(0,9999).toLocaleString()}` };
   });
 
-  pageInits.users = () => {
+  pageInits.users = async () => {
     // User Growth Chart
     new Chart($('#userGrowthChart'), { type:'line', data:{ labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], datasets:[{label:'New Users',data:[420,580,640,720,810,950,880,1020,1180,1340,1500,1680],borderColor:'#6c5ce7',backgroundColor:c=>{const g=c.chart.ctx.createLinearGradient(0,0,0,280);g.addColorStop(0,'rgba(108,92,231,0.2)');g.addColorStop(1,'rgba(108,92,231,0)');return g},borderWidth:3,fill:true,tension:.4,pointRadius:0,pointHoverRadius:6}] }, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'}},y:{grid:{color:'rgba(255,255,255,0.04)'}}}} });
 
     // Users Table
+    let tableData = [...usersData]; // Fallback
+    if (window.ProDashDB) {
+      try {
+        const user = await window.ProDashDB.getUser();
+        if (user) {
+          let customers = await window.ProDashDB.getCustomers(user.id);
+          if (!customers || customers.length === 0) {
+            showToast('⏳ Syncing initial users to database...');
+            for (const u of usersData.slice(0, 30)) {
+               await window.ProDashDB.addCustomer(user.id, {
+                 name: u.name, email: u.email, role: u.role, status: u.status, spent: parseFloat(u.spent.replace(/[^0-9.]/g,''))
+               });
+            }
+            customers = await window.ProDashDB.getCustomers(user.id);
+            showToast('✅ User database seeded!');
+          }
+          tableData = customers.map(c => ({
+            name: c.name, email: c.email || '', role: c.role, status: c.status,
+            joined: new Date(c.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),
+            spent: '$' + (c.spent || 0).toLocaleString()
+          }));
+        }
+      } catch (err) { console.error('Error fetching users:', err) }
+    }
+
     createSortableTable({
-      bodyId: 'usersTableBody', data: usersData, searchId: 'userSearch', paginationId: 'usersPagination', pageSize: 8,
+      bodyId: 'usersTableBody', data: tableData, searchId: 'userSearch', paginationId: 'usersPagination', pageSize: 8,
       columns: [
         { key:'name', render:(v,r)=>`<div style="display:flex;align-items:center;gap:10px"><div class="activity-avatar" style="background:rgba(108,92,231,0.15);color:#6c5ce7;width:32px;height:32px;border-radius:8px;font-size:0.7rem">${r.name.split(' ').map(w=>w[0]).join('')}</div>${v}</div>` },
         { key:'email' }, { key:'role' },
@@ -394,13 +441,13 @@ document.addEventListener('DOMContentLoaded', () => {
       ]
     });
 
-    $('#exportUsers').addEventListener('click', () => exportCSV(['Name','Email','Role','Status','Joined','Spent'], usersData.map(u=>[u.name,u.email,u.role,u.status,u.joined,u.spent]), 'users.csv'));
+    $('#exportUsers').addEventListener('click', () => exportCSV(['Name','Email','Role','Status','Joined','Spent'], tableData.map(u=>[u.name,u.email,u.role,u.status,u.joined,u.spent]), 'users.csv'));
   };
 
   // =======================================================================================
   // PAGE: REVENUE (lazy init)
   // =======================================================================================
-  pageInits.revenue = () => {
+  pageInits.revenue = async () => {
     // Revenue & Profit
     const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const rev = [32000,38000,35000,42000,48000,44000,52000,58000,55000,62000,68000,72000];
@@ -425,8 +472,34 @@ document.addEventListener('DOMContentLoaded', () => {
       return { id:`TXN-${String(1000+i).padStart(4,'0')}`, customer:`${fn} ${ln}`, product:products[rand(0,products.length-1)], amount:`$${rand(19,499)}.${String(rand(0,99)).padStart(2,'0')}`, status:txStatuses[rand(0,txStatuses.length-1)], date:d.toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) };
     });
 
+    let txData = [...transactions];
+    if (window.ProDashDB) {
+      try {
+        const user = await window.ProDashDB.getUser();
+        if (user) {
+          let txs = await window.ProDashDB.getTransactions(user.id);
+          if (!txs || txs.length === 0) {
+            showToast('⏳ Syncing initial transactions to database...');
+            for (const t of transactions.slice(0, 30)) {
+               await window.ProDashDB.addTransaction(user.id, {
+                 customer_name: t.customer, product: t.product, amount: parseFloat(t.amount.replace(/[^0-9.]/g,'')), status: t.status.toLowerCase()
+               });
+            }
+            txs = await window.ProDashDB.getTransactions(user.id);
+            showToast('✅ Transaction database seeded!');
+          }
+          txData = txs.map(t => ({
+            id: t.id.split('-')[0].toUpperCase(), customer: t.customer_name, product: t.product,
+            amount: '$' + parseFloat(t.amount || 0).toFixed(2),
+            status: t.status.charAt(0).toUpperCase() + t.status.slice(1),
+            date: new Date(t.created_at).toLocaleDateString()
+          }));
+        }
+      } catch (err) { console.error('Error fetching transactions:', err) }
+    }
+
     createSortableTable({
-      bodyId:'transactionsBody', data:transactions, paginationId:'transactionsPagination', pageSize:8,
+      bodyId:'transactionsBody', data:txData, paginationId:'transactionsPagination', pageSize:8,
       columns: [
         {key:'id',render:v=>`<strong style="color:var(--accent-1)">${v}</strong>`},
         {key:'customer'},{key:'product'},
@@ -435,7 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ]
     });
 
-    $('#exportTransactions').addEventListener('click', () => exportCSV(['ID','Customer','Product','Amount','Status','Date'], transactions.map(t=>[t.id,t.customer,t.product,t.amount,t.status,t.date]), 'transactions.csv'));
+    $('#exportTransactions').addEventListener('click', () => exportCSV(['ID','Customer','Product','Amount','Status','Date'], txData.map(t=>[t.id,t.customer,t.product,t.amount,t.status,t.date]), 'transactions.csv'));
   };
 
   // =======================================================================================
