@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
@@ -69,6 +70,10 @@
           <span class="user-role">Admin</span>
         </div>
       </div>
+      <button class="btn-logout" id="logoutBtn" onclick="window.ProDashDB && ProDashDB.signOut()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
+      </button>
     </div>
   </aside>
 
@@ -106,6 +111,17 @@
         <button class="notif-clear" id="notifClear">Clear All</button>
       </div>
       <div class="notif-list" id="notifList"></div>
+    </div>
+
+    <!-- Add Data Modal -->
+    <div class="modal-overlay" id="addDataModal">
+      <div class="modal-card">
+        <div class="modal-header"><h3 id="modalTitle">Add Data</h3><button class="modal-close" id="modalClose">✕</button></div>
+        <form id="addDataForm" class="settings-form">
+          <div id="modalFields"></div>
+          <button type="submit" class="btn-primary">Save</button>
+        </form>
+      </div>
     </div>
 
     <!-- PAGE: Dashboard -->
@@ -245,6 +261,16 @@
     </section>
   </main>
 
+  <script src="/supabase.js"></script>
+  <script>
+    // Auth guard: redirect to login if not signed in
+    (async () => {
+      if (window.ProDashDB) {
+        const session = await ProDashDB.getSession();
+        if (!session) window.location.href = '/auth.html';
+      }
+    })();
+  </script>
   <script type="module" src="/main.js"></script>
 </body>
 </html>

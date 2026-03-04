@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ProDash — Sign in to your analytics dashboard" />
+  <title>ProDash | Sign In</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+    :root { --accent: #6c5ce7; --accent2: #a855f7; --bg: #0a0a1a; --card: rgba(20,20,50,0.7); --border: rgba(255,255,255,0.08); --text: #f0f0ff; --muted: #8888aa; --dim: #555577 }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden }
+    body::before { content: ''; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 30% 40%, rgba(108,92,231,0.12) 0%, transparent 50%), radial-gradient(circle at 70% 60%, rgba(6,182,212,0.08) 0%, transparent 50%), radial-gradient(circle at 50% 80%, rgba(168,85,247,0.06) 0%, transparent 50%); animation: bg 20s ease-in-out infinite alternate; pointer-events: none; z-index: 0 }
+    @keyframes bg { 0% { transform: translate(0,0) rotate(0) } 100% { transform: translate(-3%,-3%) rotate(2deg) } }
+
+    .auth-container { position: relative; z-index: 1; width: 440px; max-width: 95vw }
+    .auth-card { background: var(--card); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 24px; padding: 48px 40px; box-shadow: 0 24px 64px rgba(0,0,0,0.4) }
+    .auth-logo { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 32px }
+    .auth-logo-icon { width: 52px; height: 52px; background: linear-gradient(135deg, #6c5ce7, #a855f7); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 6px 20px rgba(108,92,231,0.4) }
+    .auth-logo-text { font-size: 1.8rem; font-weight: 900; background: linear-gradient(135deg, #6c5ce7, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent }
+    .auth-title { text-align: center; font-size: 1.3rem; font-weight: 700; margin-bottom: 6px }
+    .auth-subtitle { text-align: center; color: var(--muted); font-size: 0.88rem; margin-bottom: 28px }
+
+    .form-group { margin-bottom: 18px }
+    .form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--muted); margin-bottom: 6px }
+    .form-group input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; padding: 13px 16px; color: var(--text); font-size: 0.92rem; font-family: inherit; outline: none; transition: all 0.3s }
+    .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(108,92,231,0.15) }
+    .form-group input::placeholder { color: var(--dim) }
+    #nameGroup { display: none }
+
+    .btn-primary { width: 100%; padding: 14px; background: linear-gradient(135deg, #6c5ce7, #a855f7); border: none; border-radius: 12px; color: white; font-size: 0.95rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.3s; box-shadow: 0 4px 15px rgba(108,92,231,0.3); margin-top: 8px }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(108,92,231,0.4) }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none }
+
+    .divider { display: flex; align-items: center; gap: 16px; margin: 24px 0; color: var(--dim); font-size: 0.8rem }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border) }
+
+    .oauth-btns { display: flex; gap: 12px }
+    .btn-oauth { flex: 1; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.3s }
+    .btn-oauth:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); transform: translateY(-1px) }
+    .btn-oauth svg { width: 20px; height: 20px }
+
+    .auth-footer { text-align: center; margin-top: 24px; font-size: 0.85rem; color: var(--muted) }
+    .auth-footer a { color: var(--accent); font-weight: 600; cursor: pointer; text-decoration: none }
+    .auth-footer a:hover { color: var(--accent2) }
+
+    .error-msg { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; padding: 10px 14px; border-radius: 10px; font-size: 0.82rem; margin-bottom: 16px; display: none; text-align: center }
+    .success-msg { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); color: #10b981; padding: 10px 14px; border-radius: 10px; font-size: 0.82rem; margin-bottom: 16px; display: none; text-align: center }
+
+    .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 8px; vertical-align: middle }
+    @keyframes spin { to { transform: rotate(360deg) } }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="auth-logo-icon">⚡</div>
+        <span class="auth-logo-text">ProDash</span>
+      </div>
+      <h1 class="auth-title" id="authTitle">Welcome back</h1>
+      <p class="auth-subtitle" id="authSubtitle">Sign in to your dashboard</p>
+
+      <div class="error-msg" id="errorMsg"></div>
+      <div class="success-msg" id="successMsg"></div>
+
+      <form id="authForm">
+        <div class="form-group" id="nameGroup">
+          <label>Full Name</label>
+          <input type="text" id="nameInput" placeholder="John Doe" />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="emailInput" placeholder="you@example.com" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="passwordInput" placeholder="••••••••" required minlength="6" />
+        </div>
+        <button type="submit" class="btn-primary" id="submitBtn">Sign In</button>
+      </form>
+
+      <div class="divider">or continue with</div>
+
+      <div class="oauth-btns">
+        <button class="btn-oauth" id="githubBtn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          GitHub
+        </button>
+        <button class="btn-oauth" id="googleBtn">
+          <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          Google
+        </button>
+      </div>
+
+      <div class="auth-footer">
+        <span id="toggleText">Don't have an account?</span>
+        <a id="toggleLink">Sign Up</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/supabase.js"></script>
+  <script>
+    const form = document.getElementById('authForm');
+    const emailInput = document.getElementById('emailInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const nameInput = document.getElementById('nameInput');
+    const nameGroup = document.getElementById('nameGroup');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
+    const toggleLink = document.getElementById('toggleLink');
+    let isSignUp = false;
+
+    // Check if already logged in
+    (async () => {
+      const session = await ProDashDB.getSession();
+      if (session) window.location.href = '/';
+    })();
+
+    // Toggle sign up / sign in
+    toggleLink.addEventListener('click', () => {
+      isSignUp = !isSignUp;
+      document.getElementById('authTitle').textContent = isSignUp ? 'Create account' : 'Welcome back';
+      document.getElementById('authSubtitle').textContent = isSignUp ? 'Start your free dashboard' : 'Sign in to your dashboard';
+      submitBtn.textContent = isSignUp ? 'Create Account' : 'Sign In';
+      nameGroup.style.display = isSignUp ? 'block' : 'none';
+      document.getElementById('toggleText').textContent = isSignUp ? 'Already have an account?' : "Don't have an account?";
+      toggleLink.textContent = isSignUp ? 'Sign In' : 'Sign Up';
+      errorMsg.style.display = 'none';
+      successMsg.style.display = 'none';
+    });
+
+    // Form submit
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.style.display = 'none';
+      successMsg.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span>' + (isSignUp ? 'Creating...' : 'Signing in...');
+
+      try {
+        if (isSignUp) {
+          await ProDashDB.signUp(emailInput.value, passwordInput.value, nameInput.value);
+          successMsg.textContent = '✅ Account created! Check your email to confirm, then sign in.';
+          successMsg.style.display = 'block';
+        } else {
+          await ProDashDB.signIn(emailInput.value, passwordInput.value);
+          window.location.href = '/';
+        }
+      } catch (err) {
+        errorMsg.textContent = err.message;
+        errorMsg.style.display = 'block';
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = isSignUp ? 'Create Account' : 'Sign In';
+    });
+
+    // OAuth
+    document.getElementById('githubBtn').addEventListener('click', async () => {
+      try { await ProDashDB.signInWithGitHub() } catch (err) { errorMsg.textContent = err.message; errorMsg.style.display = 'block' }
+    });
+    document.getElementById('googleBtn').addEventListener('click', async () => {
+      try { await ProDashDB.signInWithGoogle() } catch (err) { errorMsg.textContent = err.message; errorMsg.style.display = 'block' }
+    });
+  </script>
+</body>
+</html>

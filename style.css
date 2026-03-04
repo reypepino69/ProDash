@@ -223,6 +223,20 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
 @media(max-width:1200px){.stats-grid{grid-template-columns:repeat(2,1fr)}.charts-grid,.bottom-grid{grid-template-columns:1fr}.settings-grid{grid-template-columns:1fr}}
 @media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main-content{margin-left:0!important}.menu-toggle{display:flex}.stats-grid{grid-template-columns:1fr}.page-content{padding:20px 16px}.topbar{padding:0 16px}.search-trigger span,.search-trigger kbd{display:none}.notif-panel{right:8px;width:calc(100vw - 16px)}}
 
+/* ========== Modal ========== */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:1000;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-card{background:var(--bg-secondary);border:1px solid var(--glass-border);border-radius:var(--radius);width:480px;max-width:90vw;box-shadow:0 24px 64px rgba(0,0,0,0.5);animation:fadeSlideUp 0.2s ease}
+.modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--glass-border)}
+.modal-header h3{font-size:1rem;font-weight:700}
+.modal-close{background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer;transition:var(--transition)}
+.modal-close:hover{color:var(--text-primary)}
+.modal-card .settings-form{padding:24px}
+.btn-add{display:inline-flex;align-items:center;gap:6px;background:var(--gradient-primary);border:none;border-radius:8px;padding:8px 16px;color:white;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:var(--transition)}
+.btn-add:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(108,92,231,0.3)}
+.btn-logout{display:flex;align-items:center;gap:10px;width:100%;padding:10px;border:none;background:rgba(239,68,68,0.08);border-radius:var(--radius-sm);color:#ef4444;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:var(--transition);margin-top:8px}
+.btn-logout:hover{background:rgba(239,68,68,0.15)}
+
 /* ========== Scrollbar ========== */
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(108,92,231,0.3);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:rgba(108,92,231,0.5)}
 ::selection{background:rgba(108,92,231,0.3);color:var(--text-primary)}
