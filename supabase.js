@@ -44,7 +44,15 @@ async function signInWithGoogle() {
 }
 
 async function signOut() {
-  await supabase.auth.signOut();
+  try {
+    await supabase.auth.signOut();
+  } catch (err) {
+    console.error('Sign out error:', err);
+  }
+  // Force clearing local storage manually just in case
+  for (const key of Object.keys(localStorage)) {
+    if (key.startsWith('sb-')) localStorage.removeItem(key);
+  }
   window.location.href = '/auth.html';
 }
 
