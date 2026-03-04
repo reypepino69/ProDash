@@ -1,413 +1,250 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Pro Analytics Dashboard - Real-time data visualization and insights"
-    />
-    <title>Pro Dashboard | Analytics</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <link rel="stylesheet" href="/style.css" />
-  </head>
-  <body>
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <div class="logo">
-          <div class="logo-icon">⚡</div>
-          <span class="logo-text">ProDash</span>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ProDash — Premium Real-Time Analytics Dashboard" />
+  <title>ProDash | Analytics Dashboard</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <!-- Search Modal -->
+  <div class="search-modal" id="searchModal">
+    <div class="search-modal-backdrop"></div>
+    <div class="search-modal-content">
+      <div class="search-modal-input-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search anything..." id="searchModalInput" autocomplete="off" />
+        <kbd>ESC</kbd>
+      </div>
+      <div class="search-modal-results" id="searchResults">
+        <div class="search-hint">Type to search pages, users, or data...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <div class="logo-icon">⚡</div>
+        <span class="logo-text">ProDash</span>
+      </div>
+      <button class="sidebar-collapse-btn" id="sidebarCollapseBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-page="dashboard">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <a href="#" class="nav-item" data-page="analytics">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+        <span>Analytics</span>
+      </a>
+      <a href="#" class="nav-item" data-page="users">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Users</span>
+      </a>
+      <a href="#" class="nav-item" data-page="revenue">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span>Revenue</span>
+      </a>
+      <a href="#" class="nav-item" data-page="settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-card" id="userCard">
+        <div class="user-avatar" id="userAvatar">B</div>
+        <div class="user-info">
+          <span class="user-name" id="userName">bnxo69</span>
+          <span class="user-role">Admin</span>
         </div>
       </div>
-      <nav class="sidebar-nav">
-        <a href="#" class="nav-item active" data-page="dashboard">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <rect x="3" y="3" width="7" height="7" rx="1" />
-            <rect x="14" y="3" width="7" height="7" rx="1" />
-            <rect x="3" y="14" width="7" height="7" rx="1" />
-            <rect x="14" y="14" width="7" height="7" rx="1" />
-          </svg>
-          <span>Dashboard</span>
-        </a>
-        <a href="#" class="nav-item" data-page="analytics">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" />
-          </svg>
-          <span>Analytics</span>
-        </a>
-        <a href="#" class="nav-item" data-page="users">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-            <circle cx="9" cy="7" r="4" />
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-          </svg>
-          <span>Users</span>
-        </a>
-        <a href="#" class="nav-item" data-page="revenue">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <line x1="12" y1="1" x2="12" y2="23" />
-            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-          </svg>
-          <span>Revenue</span>
-        </a>
-        <a href="#" class="nav-item" data-page="settings">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <circle cx="12" cy="12" r="3" />
-            <path
-              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
-            />
-          </svg>
-          <span>Settings</span>
-        </a>
-      </nav>
-      <div class="sidebar-footer">
-        <div class="user-card">
-          <div class="user-avatar">B</div>
-          <div class="user-info">
-            <span class="user-name">bnxo69</span>
-            <span class="user-role">Admin</span>
-          </div>
-        </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content" id="mainContent">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <h1 class="page-title" id="pageTitle">Dashboard</h1>
       </div>
-    </aside>
+      <div class="topbar-right">
+        <button class="search-trigger" id="searchTrigger">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span>Search...</span>
+          <kbd>Ctrl+K</kbd>
+        </button>
+        <button class="icon-btn notification-btn" id="notifBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notification-badge" id="notifBadge">5</span>
+        </button>
+        <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="moon-icon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="sun-icon" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+    </header>
 
-    <!-- Main Content -->
-    <main class="main-content">
-      <!-- Top Bar -->
-      <header class="topbar">
-        <div class="topbar-left">
-          <button class="menu-toggle" id="menuToggle">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <line x1="3" y1="12" x2="21" y2="12" />
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <line x1="3" y1="18" x2="21" y2="18" />
-            </svg>
-          </button>
-          <h1 class="page-title">Dashboard</h1>
-        </div>
-        <div class="topbar-right">
-          <div class="search-bar">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input type="text" placeholder="Search..." id="searchInput" />
-          </div>
-          <button class="icon-btn notification-btn" id="notifBtn">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-            </svg>
-            <span class="notification-badge">3</span>
-          </button>
-          <button class="icon-btn theme-toggle" id="themeToggle">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              class="moon-icon"
-            >
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-            </svg>
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              class="sun-icon"
-              style="display: none"
-            >
-              <circle cx="12" cy="12" r="5" />
-              <line x1="12" y1="1" x2="12" y2="3" />
-              <line x1="12" y1="21" x2="12" y2="23" />
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-              <line x1="1" y1="12" x2="3" y2="12" />
-              <line x1="21" y1="12" x2="23" y2="12" />
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-            </svg>
-          </button>
-        </div>
-      </header>
+    <!-- Notification Panel -->
+    <div class="notif-panel" id="notifPanel">
+      <div class="notif-header">
+        <h3>Notifications</h3>
+        <button class="notif-clear" id="notifClear">Clear All</button>
+      </div>
+      <div class="notif-list" id="notifList"></div>
+    </div>
 
-      <!-- Dashboard Content -->
-      <div class="dashboard-content">
-        <!-- Stats Cards -->
+    <!-- PAGE: Dashboard -->
+    <section id="page-dashboard" class="page active">
+      <div class="page-content">
         <div class="stats-grid">
-          <div class="stat-card" id="stat-revenue">
-            <div class="stat-icon revenue-icon">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <line x1="12" y1="1" x2="12" y2="23" />
-                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-              </svg>
-            </div>
-            <div class="stat-details">
-              <span class="stat-label">Total Revenue</span>
-              <span class="stat-value" id="revenueValue">$48,295</span>
-              <span class="stat-change positive">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-                </svg>
-                +12.5%
-              </span>
-            </div>
-            <div class="stat-sparkline">
-              <canvas id="sparkRevenue"></canvas>
-            </div>
-          </div>
-
-          <div class="stat-card" id="stat-users">
-            <div class="stat-icon users-icon">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-              </svg>
-            </div>
-            <div class="stat-details">
-              <span class="stat-label">Active Users</span>
-              <span class="stat-value" id="usersValue">2,847</span>
-              <span class="stat-change positive">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-                </svg>
-                +8.2%
-              </span>
-            </div>
-            <div class="stat-sparkline"><canvas id="sparkUsers"></canvas></div>
-          </div>
-
-          <div class="stat-card" id="stat-orders">
-            <div class="stat-icon orders-icon">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <path d="M16 10a4 4 0 0 1-8 0" />
-              </svg>
-            </div>
-            <div class="stat-details">
-              <span class="stat-label">Total Orders</span>
-              <span class="stat-value" id="ordersValue">1,429</span>
-              <span class="stat-change positive">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-                </svg>
-                +5.7%
-              </span>
-            </div>
-            <div class="stat-sparkline"><canvas id="sparkOrders"></canvas></div>
-          </div>
-
-          <div class="stat-card" id="stat-conversion">
-            <div class="stat-icon conversion-icon">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" />
-              </svg>
-            </div>
-            <div class="stat-details">
-              <span class="stat-label">Conversion</span>
-              <span class="stat-value" id="conversionValue">3.24%</span>
-              <span class="stat-change negative">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  style="transform: rotate(180deg)"
-                >
-                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-                </svg>
-                -1.8%
-              </span>
-            </div>
-            <div class="stat-sparkline">
-              <canvas id="sparkConversion"></canvas>
-            </div>
-          </div>
+          <div class="stat-card" id="stat-revenue"><div class="stat-icon revenue-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="stat-details"><span class="stat-label">Total Revenue</span><span class="stat-value" id="revenueValue">$48,295</span><span class="stat-change positive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>+12.5%</span></div><div class="stat-sparkline"><canvas id="sparkRevenue"></canvas></div></div>
+          <div class="stat-card" id="stat-users"><div class="stat-icon users-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="stat-details"><span class="stat-label">Active Users</span><span class="stat-value" id="usersValue">2,847</span><span class="stat-change positive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>+8.2%</span></div><div class="stat-sparkline"><canvas id="sparkUsers"></canvas></div></div>
+          <div class="stat-card" id="stat-orders"><div class="stat-icon orders-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div><div class="stat-details"><span class="stat-label">Total Orders</span><span class="stat-value" id="ordersValue">1,429</span><span class="stat-change positive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>+5.7%</span></div><div class="stat-sparkline"><canvas id="sparkOrders"></canvas></div></div>
+          <div class="stat-card" id="stat-conversion"><div class="stat-icon conversion-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg></div><div class="stat-details"><span class="stat-label">Conversion</span><span class="stat-value" id="conversionValue">3.24%</span><span class="stat-change negative"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:rotate(180deg)"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>-1.8%</span></div><div class="stat-sparkline"><canvas id="sparkConversion"></canvas></div></div>
         </div>
-
-        <!-- Charts Row -->
         <div class="charts-grid">
-          <div class="chart-card main-chart">
-            <div class="chart-header">
-              <h2>Revenue Overview</h2>
-              <div class="chart-tabs">
-                <button class="chart-tab active" data-range="7d">7D</button>
-                <button class="chart-tab" data-range="30d">30D</button>
-                <button class="chart-tab" data-range="90d">90D</button>
-                <button class="chart-tab" data-range="1y">1Y</button>
-              </div>
-            </div>
-            <div class="chart-body">
-              <canvas id="revenueChart"></canvas>
-            </div>
-          </div>
-
-          <div class="chart-card">
-            <div class="chart-header">
-              <h2>Traffic Sources</h2>
-            </div>
-            <div class="chart-body doughnut-container">
-              <canvas id="trafficChart"></canvas>
-              <div class="doughnut-center">
-                <span class="doughnut-value">24.8K</span>
-                <span class="doughnut-label">Visitors</span>
-              </div>
-            </div>
-            <div class="traffic-legend" id="trafficLegend"></div>
-          </div>
+          <div class="chart-card main-chart"><div class="chart-header"><h2>Revenue Overview</h2><div class="chart-tabs"><button class="chart-tab active" data-range="7d">7D</button><button class="chart-tab" data-range="30d">30D</button><button class="chart-tab" data-range="90d">90D</button><button class="chart-tab" data-range="1y">1Y</button></div></div><div class="chart-body"><canvas id="revenueChart"></canvas></div></div>
+          <div class="chart-card"><div class="chart-header"><h2>Traffic Sources</h2></div><div class="chart-body doughnut-container"><canvas id="trafficChart"></canvas><div class="doughnut-center"><span class="doughnut-value">24.8K</span><span class="doughnut-label">Visitors</span></div></div><div class="traffic-legend" id="trafficLegend"></div></div>
         </div>
-
-        <!-- Bottom Row -->
         <div class="bottom-grid">
-          <!-- Recent Activity -->
-          <div class="card activity-card">
-            <div class="card-header">
-              <h2>Recent Activity</h2>
-              <a href="#" class="view-all">View All</a>
-            </div>
-            <div class="activity-list" id="activityList"></div>
-          </div>
+          <div class="card activity-card"><div class="card-header"><h2>Recent Activity</h2><a href="#" class="view-all" data-goto="analytics">View All →</a></div><div class="activity-list" id="activityList"></div></div>
+          <div class="card live-card"><div class="card-header"><h2>Live Visitors</h2><span class="live-badge"><span class="live-dot"></span>Live</span></div><div class="live-count" id="liveCount">142</div><div class="live-chart-container"><canvas id="liveChart"></canvas></div><div class="live-locations" id="liveLocations"></div></div>
+        </div>
+      </div>
+    </section>
 
-          <!-- Live Visitors -->
-          <div class="card live-card">
-            <div class="card-header">
-              <h2>Live Visitors</h2>
-              <span class="live-badge">
-                <span class="live-dot"></span>
-                Live
-              </span>
+    <!-- PAGE: Analytics -->
+    <section id="page-analytics" class="page">
+      <div class="page-content">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(108,92,231,0.15);color:#6c5ce7"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div><div class="stat-details"><span class="stat-label">Page Views</span><span class="stat-value">184,293</span><span class="stat-change positive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>+14.2%</span></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(6,182,212,0.15);color:#06b6d4"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="stat-details"><span class="stat-label">Avg. Session</span><span class="stat-value">4m 32s</span><span class="stat-change positive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>+6.8%</span></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(245,158,11,0.15);color:#f59e0b"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg></div><div class="stat-details"><span class="stat-label">Bounce Rate</span><span class="stat-value">32.1%</span><span class="stat-change negative"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:rotate(180deg)"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>+2.4%</span></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(16,185,129,0.15);color:#10b981"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div class="stat-details"><span class="stat-label">Sessions</span><span class="stat-value">52,847</span><span class="stat-change positive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>+9.1%</span></div></div>
+        </div>
+        <div class="charts-grid">
+          <div class="chart-card main-chart"><div class="chart-header"><h2>Page Views & Sessions</h2></div><div class="chart-body"><canvas id="analyticsChart"></canvas></div></div>
+          <div class="chart-card"><div class="chart-header"><h2>Device Breakdown</h2></div><div class="chart-body doughnut-container"><canvas id="deviceChart"></canvas><div class="doughnut-center"><span class="doughnut-value">52.8K</span><span class="doughnut-label">Sessions</span></div></div><div class="traffic-legend" id="deviceLegend"></div></div>
+        </div>
+        <div class="card" style="margin-top:0"><div class="card-header"><h2>Top Pages</h2><button class="btn-export" id="exportTopPages">⬇ Export CSV</button></div>
+          <div class="data-table-wrap"><table class="data-table" id="topPagesTable"><thead><tr><th data-sort="page">Page</th><th data-sort="views">Views</th><th data-sort="uniques">Uniques</th><th data-sort="bounce">Bounce Rate</th><th data-sort="duration">Avg. Duration</th></tr></thead><tbody id="topPagesBody"></tbody></table></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE: Users -->
+    <section id="page-users" class="page">
+      <div class="page-content">
+        <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(108,92,231,0.15);color:#6c5ce7"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="stat-details"><span class="stat-label">Total Users</span><span class="stat-value">12,483</span></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(16,185,129,0.15);color:#10b981"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg></div><div class="stat-details"><span class="stat-label">New This Month</span><span class="stat-value">847</span></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(6,182,212,0.15);color:#06b6d4"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div><div class="stat-details"><span class="stat-label">Active Now</span><span class="stat-value">342</span></div></div>
+        </div>
+        <div class="chart-card" style="margin-bottom:20px"><div class="chart-header"><h2>User Growth</h2></div><div class="chart-body"><canvas id="userGrowthChart"></canvas></div></div>
+        <div class="card">
+          <div class="card-header"><h2>All Users</h2><div class="table-controls"><input type="text" class="table-search" placeholder="Search users..." id="userSearch" /><button class="btn-export" id="exportUsers">⬇ Export CSV</button></div></div>
+          <div class="data-table-wrap"><table class="data-table" id="usersTable"><thead><tr><th data-sort="name">Name</th><th data-sort="email">Email</th><th data-sort="role">Role</th><th data-sort="status">Status</th><th data-sort="joined">Joined</th><th data-sort="spent">Spent</th></tr></thead><tbody id="usersTableBody"></tbody></table></div>
+          <div class="table-pagination" id="usersPagination"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE: Revenue -->
+    <section id="page-revenue" class="page">
+      <div class="page-content">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(108,92,231,0.15);color:#6c5ce7"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="stat-details"><span class="stat-label">Monthly Recurring</span><span class="stat-value">$38,420</span><span class="stat-change positive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>+15.3%</span></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(16,185,129,0.15);color:#10b981"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/></svg></div><div class="stat-details"><span class="stat-label">Annual Revenue</span><span class="stat-value">$461,040</span><span class="stat-change positive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>+22.1%</span></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(6,182,212,0.15);color:#06b6d4"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="stat-details"><span class="stat-label">Avg. Order Value</span><span class="stat-value">$67.50</span><span class="stat-change positive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>+3.8%</span></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(245,158,11,0.15);color:#f59e0b"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div><div class="stat-details"><span class="stat-label">Refund Rate</span><span class="stat-value">1.2%</span><span class="stat-change negative"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:rotate(180deg)"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>+0.3%</span></div></div>
+        </div>
+        <div class="charts-grid">
+          <div class="chart-card main-chart"><div class="chart-header"><h2>Revenue & Profit</h2></div><div class="chart-body"><canvas id="revProfitChart"></canvas></div></div>
+          <div class="chart-card"><div class="chart-header"><h2>Revenue by Channel</h2></div><div class="chart-body doughnut-container"><canvas id="channelChart"></canvas><div class="doughnut-center"><span class="doughnut-value">$38.4K</span><span class="doughnut-label">MRR</span></div></div><div class="traffic-legend" id="channelLegend"></div></div>
+        </div>
+        <div class="card"><div class="card-header"><h2>Recent Transactions</h2><button class="btn-export" id="exportTransactions">⬇ Export CSV</button></div>
+          <div class="data-table-wrap"><table class="data-table" id="transactionsTable"><thead><tr><th data-sort="id">ID</th><th data-sort="customer">Customer</th><th data-sort="product">Product</th><th data-sort="amount">Amount</th><th data-sort="status">Status</th><th data-sort="date">Date</th></tr></thead><tbody id="transactionsBody"></tbody></table></div>
+          <div class="table-pagination" id="transactionsPagination"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE: Settings -->
+    <section id="page-settings" class="page">
+      <div class="page-content">
+        <div class="settings-grid">
+          <div class="card settings-card">
+            <div class="card-header"><h2>Profile</h2></div>
+            <div class="settings-form">
+              <div class="form-group"><label>Display Name</label><input type="text" id="settingName" value="bnxo69" /></div>
+              <div class="form-group"><label>Email</label><input type="email" id="settingEmail" value="reypepino69@gmail.com" /></div>
+              <div class="form-group"><label>Bio</label><textarea id="settingBio" rows="3" placeholder="Tell us about yourself..."></textarea></div>
+              <button class="btn-primary" id="saveProfile">Save Profile</button>
             </div>
-            <div class="live-count" id="liveCount">142</div>
-            <div class="live-chart-container">
-              <canvas id="liveChart"></canvas>
+          </div>
+          <div class="card settings-card">
+            <div class="card-header"><h2>Appearance</h2></div>
+            <div class="settings-form">
+              <div class="form-group"><label>Theme</label>
+                <div class="theme-picker" id="themePicker">
+                  <button class="theme-option active" data-accent="#6c5ce7" style="--swatch:#6c5ce7" title="Purple"></button>
+                  <button class="theme-option" data-accent="#06b6d4" style="--swatch:#06b6d4" title="Cyan"></button>
+                  <button class="theme-option" data-accent="#10b981" style="--swatch:#10b981" title="Emerald"></button>
+                  <button class="theme-option" data-accent="#f59e0b" style="--swatch:#f59e0b" title="Amber"></button>
+                  <button class="theme-option" data-accent="#ef4444" style="--swatch:#ef4444" title="Red"></button>
+                  <button class="theme-option" data-accent="#ec4899" style="--swatch:#ec4899" title="Pink"></button>
+                </div>
+              </div>
+              <div class="form-group"><label>Dark Mode</label>
+                <label class="toggle-switch"><input type="checkbox" id="darkModeToggle" checked /><span class="toggle-slider"></span></label>
+              </div>
+              <div class="form-group"><label>Sidebar Compact</label>
+                <label class="toggle-switch"><input type="checkbox" id="compactSidebar" /><span class="toggle-slider"></span></label>
+              </div>
             </div>
-            <div class="live-locations" id="liveLocations"></div>
+          </div>
+          <div class="card settings-card">
+            <div class="card-header"><h2>Notifications</h2></div>
+            <div class="settings-form">
+              <div class="form-group toggle-row"><label>Email Alerts</label><label class="toggle-switch"><input type="checkbox" id="notifEmail" checked /><span class="toggle-slider"></span></label></div>
+              <div class="form-group toggle-row"><label>Push Notifications</label><label class="toggle-switch"><input type="checkbox" id="notifPush" checked /><span class="toggle-slider"></span></label></div>
+              <div class="form-group toggle-row"><label>Weekly Report</label><label class="toggle-switch"><input type="checkbox" id="notifWeekly" /><span class="toggle-slider"></span></label></div>
+              <div class="form-group toggle-row"><label>Marketing Emails</label><label class="toggle-switch"><input type="checkbox" id="notifMarketing" /><span class="toggle-slider"></span></label></div>
+            </div>
+          </div>
+          <div class="card settings-card">
+            <div class="card-header"><h2>Keyboard Shortcuts</h2></div>
+            <div class="shortcuts-list">
+              <div class="shortcut-item"><span>Search</span><kbd>Ctrl + K</kbd></div>
+              <div class="shortcut-item"><span>Dashboard</span><kbd>Ctrl + 1</kbd></div>
+              <div class="shortcut-item"><span>Analytics</span><kbd>Ctrl + 2</kbd></div>
+              <div class="shortcut-item"><span>Users</span><kbd>Ctrl + 3</kbd></div>
+              <div class="shortcut-item"><span>Revenue</span><kbd>Ctrl + 4</kbd></div>
+              <div class="shortcut-item"><span>Settings</span><kbd>Ctrl + 5</kbd></div>
+              <div class="shortcut-item"><span>Toggle Theme</span><kbd>Ctrl + D</kbd></div>
+              <div class="shortcut-item"><span>Close Modal</span><kbd>Esc</kbd></div>
+            </div>
           </div>
         </div>
       </div>
-    </main>
+    </section>
+  </main>
 
-    <script type="module" src="/main.js"></script>
-  </body>
+  <script type="module" src="/main.js"></script>
+</body>
 </html>
